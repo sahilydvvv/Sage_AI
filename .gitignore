@@ -1,7 +1,13 @@
 # Python
 __pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
+.pyre/
+.mypy_cache/
+.pytype/
+cython_debug/
 *.so
 .Python
 build/
@@ -19,12 +25,15 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+pip-wheel-metadata/
+share/python-wheels/
 
 # Virtual environments
 venv/
 ENV/
 env/
-.venv
+.venv/
+venv.bak/
 
 # IDEs
 .vscode/
@@ -33,15 +42,16 @@ env/
 *.swo
 *~
 
-# Environment variables
+# Environment and credentials
 .env
-.env.local
+.env.*
+credentials.json
+token.json
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Testing
-.pytest_cache/
+# Testing / coverage
 .coverage
 htmlcov/
