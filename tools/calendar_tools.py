@@ -11,7 +11,7 @@ def create_calendar_event(summary: str):
     Create a Google Calendar event.
     """
 
-    start_time = datetime.now() + timedelta(minutes=5)  # Event starts 5 minutes from now
+    start_time = datetime.now() + timedelta(minutes=5)
     end_time = start_time + timedelta(hours=1)
 
     event = {
@@ -34,13 +34,6 @@ def create_calendar_event(summary: str):
     ).execute()
 
     return "Event created successfully"
-# TEST
-print(
-    create_calendar_event.invoke(
-        "DSA Practice Session"
-    )
-)
-
 
 @tool
 def get_upcoming_events():
@@ -83,9 +76,7 @@ def get_upcoming_events():
             "end": end
         })
         
-    return event_list
-
-# TEST
-print(
-     get_upcoming_events.invoke({})
-)   
+    if len(event_list) == 0:
+        return "No upcoming events found."
+    
+    return event_list   
