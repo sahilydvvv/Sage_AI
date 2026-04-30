@@ -27,6 +27,7 @@ def create_calendar_event(summary: str):
             "timeZone": "Asia/Kolkata",
         },
     }
+    print(f"Creating event: {event}")
 
     service.events().insert(
         calendarId="primary",
@@ -71,6 +72,7 @@ def get_upcoming_events():
         )
 
         event_list.append({
+            "id": event["id"],
             "summary": event["summary"],
             "start": start,
             "end": end
@@ -80,3 +82,16 @@ def get_upcoming_events():
         return "No upcoming events found."
     
     return event_list   
+
+
+@tool
+def delete_calendar_event(event_id: str):
+    """
+    Delete a Google Calendar event using its event ID.
+    """
+    service.events().delete(
+        calendarId="primary",
+        eventId=event_id
+    ).execute()
+
+    return f"Event {event_id} deleted successfully."

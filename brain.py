@@ -3,15 +3,16 @@ load_dotenv()
 
 from langchain_groq import ChatGroq
 from langchain_core.messages import (SystemMessage,HumanMessage,ToolMessage)
-from tools.calendar_tools import (create_calendar_event,get_upcoming_events)
+from tools.calendar_tools import create_calendar_event,get_upcoming_events,delete_calendar_event
 
 llm = ChatGroq(model="llama-3.3-70b-versatile")
-tools = [create_calendar_event,get_upcoming_events]
+tools = [create_calendar_event,get_upcoming_events,delete_calendar_event]
 llm_with_tools = llm.bind_tools(tools)
 
 tools_dict = {
     "create_calendar_event": create_calendar_event,
-    "get_upcoming_events": get_upcoming_events
+    "get_upcoming_events": get_upcoming_events,
+    "delete_calendar_event": delete_calendar_event
 }
 
 messages = [
@@ -23,7 +24,7 @@ messages = [
 
     HumanMessage(
         content=(
-            '''check my calendar and create an event for dsa practice if there are no events in the next 3 hours.'''
+            '''check my calendar and delete any event present.'''
         )
     )
 ]
