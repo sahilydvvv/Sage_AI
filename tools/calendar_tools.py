@@ -1,18 +1,31 @@
 from langchain.tools import tool
 from datetime import datetime, timedelta, timezone
+from dateparser import parse
 
 from auth import get_calendar_service
 
 service = get_calendar_service()
 
 @tool
-def create_calendar_event(summary: str):
+def create_calendar_event(summary: str, start_time: str, end_time: str):
     """
     Create a Google Calendar event.
     """
-
-    start_time = datetime.now() + timedelta(minutes=5)
-    end_time = start_time + timedelta(hours=1)
+    start_time = parse(start_time,
+        settings={
+            "TIMEZONE": "Asia/Kolkata",
+            "RETURN_AS_TIMEZONE_AWARE": True
+        })
+    if end_time:
+        end_time = parse(end_time,
+                          settings={
+                              "TIMEZONE": "Asia/Kolkata",
+                              "RETURN_AS_TIMEZONE_AWARE": True
+                          })
+    else:
+        end_time = start_time + timedelta(hours=1)    
+    print(f"Parsed end time: {end_time}")
+    
 
     event = {
         "summary": summary,
@@ -49,7 +62,7 @@ def get_upcoming_events():
     events_result = service.events().list(
         calendarId="primary",
         timeMin=now,
-        maxResults=10,
+        maxResults=24,
         singleEvents=True,
         orderBy="startTime"
     ).execute()
@@ -70,6 +83,7 @@ def get_upcoming_events():
             event["end"].get("dateTime")
             or event["end"].get("date")
         )
+        
 
         event_list.append({
             "id": event["id"],
@@ -83,6 +97,7 @@ def get_upcoming_events():
     
     return event_list   
 
+print(get_upcoming_events.invoke({}))
 
 @tool
 def delete_calendar_event(event_id: str):

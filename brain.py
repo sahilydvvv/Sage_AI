@@ -4,11 +4,13 @@ load_dotenv()
 from langchain_groq import ChatGroq
 from langchain_core.messages import (SystemMessage,HumanMessage,ToolMessage)
 from tools.calendar_tools import create_calendar_event,get_upcoming_events,delete_calendar_event
+from datetime import datetime, timedelta, timezone
 
 llm = ChatGroq(model="llama-3.3-70b-versatile")
 tools = [create_calendar_event,get_upcoming_events,delete_calendar_event]
 llm_with_tools = llm.bind_tools(tools)
 
+current_date = datetime.now()
 tools_dict = {
     "create_calendar_event": create_calendar_event,
     "get_upcoming_events": get_upcoming_events,
@@ -24,7 +26,11 @@ messages = [
 
     HumanMessage(
         content=(
-            '''check my calendar and delete any event present.'''
+            f'''delete all todays event
+            Today's date is {current_date}.
+If the user says "today", "tomorrow", etc.,
+always use the current year 2026.
+Never generate past years unless explicitly requested."'''
         )
     )
 ]
